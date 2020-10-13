@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
+		<script type="text/javascript" src="js/sjcl/sjcl.js"></script>
+		<script type="text/javascript" src="js/log.js"></script>
+		<script type="text/javascript" src="js/get-url-params.js"></script>
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+	<body>
+		<div class="page">
+			<div class="content">
+				<div class="content-item">
+					<h1>
+						Receive URL
+					</h1>
+				</div>
+				<div class="content-item">
+					<h2 id="id"></h2>
+				</div>
+				<div class="content-item">
+					<img id="qrcode"></img>
+				</div>
+				<!-- <div>
+					<label for="enc-key">Password</label>
+					<input id="enc-key" type="text" />
+					<input id="enc-cb" type="checkbox" />
+				</div> -->
+				<div class="content-item">
+					<span class="url-box">
+						<a id="url-anchor" target="_blank" rel="noopener noreferrer">Press "Get URL" to refresh</a>
+					</span>
+				</div>
+				<div class="content-item">
+					<button id="get-url-button" disabled>Get URL</button>
+				</div>
+				<div class="content-item">
+					<p id="status"></p>
+				</div>
+				<div id="log"></div>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="js/receive.js"></script>
+		<!-- <script type="text/javascript" src="js/qrcode.js"></script>
+		<script>
+			try {
+				new QRCode(document.getElementById("qrcode"), "http://jindo.dev.naver.com/collie");
+			} catch(error) {
+				appendLog(error)
+			}
+			appendLog(document.querySelector("#qrcode img").src.length)
+		</script> -->
+	</body>
+</html>

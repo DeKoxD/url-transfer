@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'>
+		<script type="text/javascript" src="js/log.js"></script>
+		<script type="text/javascript" src="js/get-url-params.js"></script>
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+	<body>
+		<div class="page">
+			<div class="content">
+				<div class="content-item">
+					<h1>
+						Send URL
+					</h1>
+				</div>
+				<div class="content-item">
+					<h2 id="id" style="display:none"></h2>
+					<input id="id-input" type="text" placeholder="Type ID here..." style="display:none">
+				</div>
+				<div class="content-item">
+					<input id="url-input" placeholder="Type URL to be sent here..." type="text">
+				</div>
+				<div class="content-item">
+					<button id="send-url-button">Send URL</button>
+				</div>
+				<div class="content-item">
+					<p id="status"></p>
+				</div>
+				<div class="content-item">
+					<div id="log"></div>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="js/send.js"></script>
+	</body>
+</html>

@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  db:
+    image: redis:alpine
+  backend:
+    build: backend
+    env_file:
+      - ./docker/vars/backend.env
+    depends_on:
+      - db
+  proxy_frontend:
+    build: proxy_frontend
+    ports:
+      - 80:3000
+    depends_on:
+      - backend
+  qrcode:
+    build: qrcode
