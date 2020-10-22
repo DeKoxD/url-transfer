@@ -12,15 +12,18 @@ var elButtonSendURL = document.getElementById("send-url-button");
 
 var elPStatus = document.getElementById("status");
 
+var elDivLog = document.getElementById('log');
+
 const params = getURLParams();
 
 if(params.logs && (params.logs !== "false" || params.logs !== "0")) {
-	lggr = new logger(document.getElementById('log'));
+	lggr = new logger(elDivLog);
+	elDivLog.style.display = "block";
 } else {
 	lggr = { log: function() {} };
 }
 
-id = params.id;
+id = String(params.id);
 if(!id || !id.length) {
 	elInputID.style.display = 'block';
 	elInputID.onkeyup = function(e) {
@@ -33,7 +36,6 @@ if(!id || !id.length) {
 
 var xhrURL = new XMLHttpRequest();
 xhrURL.onload = function () {
-	lggr.log(xhrURL.response)
 	elPStatus.innerText = "Done!"
 }
 xhrURL.onerror = function() {
@@ -52,15 +54,15 @@ function sendURL() {
 		xhrURL.open('PUT', serverAddr + '/url/' + id);
 		xhrURL.setRequestHeader('Content-Type', 'application/json')
 		xhrURL.send(payload);
+		lggr.log("URL sent:", url);
 	} catch (error) {
-		lggr.log(error)
+		lggr.log("Error sending URL", error)
 	}
 }
 
 elButtonSendURL.onclick = sendURL;
 elInputURL.onkeypress = function(e) {
 	if(e.keyCode === 13) {
-		lggr.log('sending')
 		sendURL()
 	}
 }

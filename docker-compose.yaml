@@ -1,13 +1,16 @@
 version: "3.8"
 services:
-  db:
+  db-url:
+    image: redis:alpine
+  db-id:
     image: redis:alpine
   backend:
     build: backend
     env_file:
       - ./docker/vars/backend.env
     depends_on:
-      - db
+      - db-url
+      - db-id
   proxy_frontend:
     build: proxy_frontend
     ports:

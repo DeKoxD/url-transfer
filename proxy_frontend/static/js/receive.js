@@ -4,16 +4,21 @@ var serverAddr = window.location.protocol + "//" + window.location.host;
 
 var lggr;
 
-var elH2ID = document.getElementById("id");
+var elDivID = document.getElementById("id");
 
 var elButtonGetURL = document.getElementById("get-url-button");
 var elAURL = document.getElementById("url-anchor")
 var elDivQRCode = document.getElementById("qrcode")
 
+var elDivLog = document.getElementById('log');
+
 const params = getURLParams();
 
+document.getElementById('hostname').textContent = serverAddr;
+
 if(params.logs && (params.logs !== "false" || params.logs !== "0")) {
-	lggr = new logger(document.getElementById('log'));
+	lggr = new logger(elDivLog);
+	elDivLog.style.display = "block";
 } else {
 	lggr = { log: function() {} };
 }
@@ -26,39 +31,52 @@ function getParamsString(params) {
 	return paramStrings.join('&');
 }
 
+function setID(newID) {
+	if(id !== newID) {
+		lggr.log("ID change:", id || "none", newID);
+		id = newID;
+		elDivID.innerText = newID;
+		elButtonGetURL.disabled = false;
+		elDivQRCode.src = serverAddr + '/qrcode?id=' + newID + '&url=' + serverAddr + '/send?id=' + newID
+	}
+}
+
+function setURLBox(text, ref) {
+	elAURL.innerHTML = text;
+	if(ref) {
+		elAURL.href = url;
+	} else {
+		elAURL.removeAttribute("href")
+	}
+}
+
 var xhrURL = new XMLHttpRequest();
 xhrURL.onload = function () {
-	lggr.log(xhrURL.response)
 	try {
 		var response = JSON.parse(xhrURL.response)
+		lggr.log("XHR URL Response:", response)
 		if(response.url) {
 			url = response.url;
-			elAURL.innerHTML = url;
-			elAURL.href = url;
+			setURLBox(url, url);
 		} else {
-			elAURL.innerHTML = "No URL found";
-			elAURL.removeAttribute("href")
+			setURLBox("Status: No URL found")
 		}
 		if(!id || !id.length) {
 			if(response.id) {
 				if(response.id.length) {
-					id = response.id;
-					elH2ID.innerText = "ID: " + id;
+					setID(response.id);
 				}
 			}
 		}
-		lggr.log(url);
 	} catch (error) {
-		lggr.log(error)
+		lggr.log("XHR URL Error:", error, xhrURL.response)
 	}
 }
 xhrURL.onloadstart = function() {
-	elAURL.innerHTML = "Fetching...";
-	elAURL.removeAttribute("href")
+	setURLBox("Status: Fetching...");
 }
 xhrURL.onerror = function() {
-	elAURL.innerHTML = "Error!";
-	elAURL.removeAttribute("href")
+	setURLBox("Status: Error!")
 }
 
 elButtonGetURL.onclick = function() {
@@ -67,21 +85,28 @@ elButtonGetURL.onclick = function() {
 }
 
 
-// Register
+// Registration
+var interval;
+var intervalID;
 var xhrRegister = new XMLHttpRequest();
+var registerFunc = function() {
+	xhrRegister.open('GET', serverAddr + '/register');
+	xhrRegister.send();
+}
 xhrRegister.onload = function () {
 	try {
 		var response = JSON.parse(xhrRegister.response)
 		if(response.id) {
-			id = response.id
-			elButtonGetURL.disabled = false;
-			elDivQRCode.src = serverAddr + '/qrcode?url=' + serverAddr + '/send?id=' + id
-			elH2ID.innerText = "ID: " + id;
-			lggr.log(id);
+			setID(response.id);
+			if(interval !== response.timeout * 1000) {
+				interval = response.timeout * 1000;
+				clearInterval(intervalID);
+				intervalID = setInterval(registerFunc, interval)
+			}
 		}
 	} catch (error) {
-		lggr.log(error)
+		lggr.log("XHR Registation Error:", error)
 	}
 }
-xhrRegister.open('GET', serverAddr + '/register');
-xhrRegister.send();
+
+registerFunc();

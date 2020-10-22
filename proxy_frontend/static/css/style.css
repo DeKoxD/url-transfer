@@ -48,7 +48,7 @@
 	border-radius: 2px;
 }
 .content-item {
-	padding: 0 0 2rem 0;
+	padding: 0 0 1rem 0;
 	width: 100%;
 	display: flex;
 	justify-content: center;
@@ -82,4 +82,16 @@
 #qrcode {
 	border: 2px solid #303030;
 	border-radius: 2px;
+}
+
+.index-buttons :first-child {
+	margin-right: 20px;
+}
+
+#log pre {
+	white-space: pre-wrap;
+	white-space: -moz-pre-wrap;
+	white-space: -pre-wrap;
+	white-space: -o-pre-wrap;
+	word-wrap: break-word;
 }

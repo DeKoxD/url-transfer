@@ -6,14 +6,14 @@ logger.prototype.log = function() {
 	if(!this.elLog) {
 		return;
 	}
+	const p = document.createElement('pre');
+	p.textContent = new Date().toISOString() + ":\n";
 	for(var i = 0; i < arguments.length; i++) {
-		const p = document.createElement('pre');
-		p.innerText = new Date().toISOString() + ": ";
 		try {
-			p.innerText += JSON.stringify(arguments[i], null, 2);
+			p.textContent += JSON.stringify(arguments[i], null, 2) + "\n";
 		} catch(error) {
-			p.innerText = error + " -> " + arguments[i]; 
+			p.textContent += error + " -> " + arguments[i] + "\n"; 
 		}
-		this.elLog.insertBefore(p, this.elLog.firstChild);
 	}
+	this.elLog.insertBefore(p, this.elLog.firstChild);
 }

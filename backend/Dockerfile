@@ -1,8 +1,8 @@
 FROM golang:latest AS build
 
 WORKDIR /compose/backend
-COPY main.go main.go
 RUN go get github.com/mediocregopher/radix
+COPY main.go main.go
 RUN CGO_ENABLED=0 go build -o backend main.go
 
 FROM scratch
